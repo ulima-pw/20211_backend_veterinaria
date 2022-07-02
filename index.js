@@ -21,6 +21,12 @@ app.get("/mascotas", async (req, resp) => {
     resp.send(JSON.stringify(mascotas))
 })
 
+// Endpoint: Agregar una nueva mascota
+// POST /mascotas
+app.post("/mascotas", (req, resp) => {
+    resp.send("OK")
+})
+
 app.listen(PORT, () => {
     console.log(`Servidor inicial en puerto ${PORT}`)
 })

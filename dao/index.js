@@ -25,4 +25,20 @@ const Mascota = sequelize.define("Mascota", {
     timestamps : false
 })
 
-export { Mascota }
+const TipoMascota = sequelize.define("TipoMascota", {
+    id : {
+        primaryKey : true,
+        type : DataTypes.UUID,
+        defaultValue : Sequelize.UUIDV4
+    },
+    nombre : DataTypes.STRING(100),
+    activo : {
+        type : DataTypes.BOOLEAN,
+        allowNull : false
+    }
+},{
+    freezeTableName : true,
+    timestamps : false
+})
+
+export { Mascota, TipoMascota }
