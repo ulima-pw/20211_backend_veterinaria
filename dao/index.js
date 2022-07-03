@@ -41,4 +41,13 @@ const TipoMascota = sequelize.define("TipoMascota", {
     timestamps : false
 })
 
+// RELACIONES
+Mascota.belongsTo(TipoMascota, {
+    foreignKey : "idTipoMascota"
+})
+TipoMascota.hasMany(Mascota, {
+    foreignKey : "id"
+})
+
+
 export { Mascota, TipoMascota }

@@ -1,12 +1,13 @@
 import express from "express"
 import bodyParser from "body-parser"
-import { Mascota } from "./dao/index.js"
+import { Mascota, TipoMascota } from "./dao/index.js"
 
 const PORT = 5000
 const app = express()
 app.use(bodyParser.json()) // configuracion para recibir json por post (cuerpo)
 
 //============================================================================================
+// Entidad: Mascotas
 
 // Endpoint: Obtener lista de mascotas
 // GET /mascotas?edad=5 
@@ -22,7 +23,20 @@ app.get("/mascotas", async (req, resp) => {
             }
         })
     }
-    resp.send(JSON.stringify(mascotas))
+    
+    let mascotasConTipo = []
+    for (let masc of mascotas) {
+        const tipoMascota = await TipoMascota.findByPk(masc.idTipoMascota)
+        mascotasConTipo.push({
+            id : masc.id,
+            nombre : masc.nombre,
+            edad : masc.edad,
+            birthday : masc.birthday,
+            tipo : tipoMascota
+        })
+    }
+
+    resp.send(JSON.stringify(mascotasConTipo))
 })
 
 // Endpoint: Obtener una mascota segun el id
@@ -33,7 +47,15 @@ app.get("/mascota/:id", async (req, resp)=> {
     const mascota = await Mascota.findByPk(idMascota)
 
     if (mascota != null) {
-        resp.send("OK")
+        const tipoMascota = await TipoMascota.findByPk(mascota.idTipoMascota)
+        const mascotaConTipo = {
+            id : mascota.id,
+            nombre : mascota.nombre,
+            edad : mascota.edad,
+            birthday : mascota.birthday,
+            tipo : tipoMascota
+        }
+        resp.send(mascotaConTipo)
     }else {
         resp.status(400).send("ERROR: No existe id de mascota")
     }
