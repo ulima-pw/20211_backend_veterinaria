@@ -41,6 +41,31 @@ const TipoMascota = sequelize.define("TipoMascota", {
     timestamps : false
 })
 
+const Veterinario = sequelize.define("Veterinario", {
+    id : {
+        primaryKey : true,
+        type : DataTypes.UUID,
+        defaultValue : Sequelize.UUIDV4
+    },
+    nombre : DataTypes.STRING(200)
+})
+
+const Atencion = sequelize.define("Atencion", {
+    id : {
+        primaryKey : true,
+        type : DataTypes.UUID,
+        defaultValue : Sequelize.UUIDV4
+    },
+    idMascota : {
+        type : DataTypes.UUID,
+        allowNull : false
+    },
+    idVeterinario : {
+        type : DataTypes.UUID,
+        allowNull : false
+    }
+})
+
 // RELACIONES
 Mascota.belongsTo(TipoMascota, {
     foreignKey : "idTipoMascota"
@@ -49,5 +74,18 @@ TipoMascota.hasMany(Mascota, {
     foreignKey : "id"
 })
 
+Atencion.belongsTo(Mascota, {
+    foreignKey : "idMascota"
+})
+Mascota.hasMany(Atencion, {
+    foreignKey : "id"
+})
 
-export { Mascota, TipoMascota }
+Atencion.belongsTo(Veterinario, {
+    foreignKey : "idVeterinario"
+})
+Veterinario.hasMany(Atencion, {
+    foreignKey : "id"
+})
+
+export { Mascota, TipoMascota, Atencion, Veterinario }
