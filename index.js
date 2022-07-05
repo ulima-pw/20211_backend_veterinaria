@@ -1,13 +1,20 @@
 import express from "express"
+import cors from "cors"
 import bodyParser from "body-parser"
 import { Mascota, TipoMascota } from "./dao/index.js"
 
 const PORT = 5000
 const app = express()
+
+const corsOptions = {
+    origin : ["http://localhost:8080", "https://localhost:8080"]
+}
+
+app.use(cors(corsOptions)) // CORS
 app.use(bodyParser.json()) // configuracion para recibir json por post (cuerpo)
 
 //============================================================================================
-// Entidad: Mascotas
+// Recurso: Mascotas (/mascotas)
 
 // Endpoint: Obtener lista de mascotas
 // GET /mascotas?edad=5 
@@ -108,6 +115,49 @@ app.delete("/mascotas/:id", async (req, resp) => {
 })
 
 //============================================================================================
+
+// Recurso: TipoMascota (/tipomascotas)
+app.get("/tipomascotas", async (req, resp) => {
+    resp.send(await TipoMascota.findAll())
+})
+
+app.get("/tipomascota/:id", async (req, resp) => {
+    const idTipoMascota = req.params.id
+
+    if (idTipoMascota != null) {
+        const tipoMascota = await TipoMascota.findByPk(idTipoMascota)
+        if (tipoMascota != null) {
+            resp.send(tipoMascota)
+        }else {
+            resp.status(400).send("ERROR: Id de TipoMascota no existe")
+        }
+    }else {
+        resp.status(400).send("ERROR: Debe ingresar un id")
+    }
+})
+
+app.post("/tipomascotas", async (req, resp) => {
+    const mascota = req.body
+    await TipoMascota.create({
+        nombre : mascota.nombre,
+        activo : mascota.activo
+    })
+    resp.send("OK")
+})
+
+app.put("/tipomascotas", (req, resp) => {
+
+})
+
+app.delete("/tipomascotas/:id", (req, resp) => {
+
+})
+
+
+//============================================================================================
+
+
+
 
 app.listen(PORT, () => {
     console.log(`Servidor inicial en puerto ${PORT}`)
