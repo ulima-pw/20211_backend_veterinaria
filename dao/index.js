@@ -19,7 +19,8 @@ const Mascota = sequelize.define("Mascota", {
     birthday : {
         type : DataTypes.DATE,
         allowNull : false
-    }
+    },
+    idTipoMascota : DataTypes.UUID
 },{
     freezeTableName : true,
     timestamps : false

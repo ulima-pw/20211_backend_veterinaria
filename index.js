@@ -7,7 +7,7 @@ const PORT = 5000
 const app = express()
 
 const corsOptions = {
-    origin : ["http://localhost:8080", "https://localhost:8080"]
+    origin : ["http://localhost:3000"]
 }
 
 app.use(cors(corsOptions)) // CORS
@@ -76,7 +76,8 @@ app.post("/mascotas", async (req, resp) => {
     await Mascota.create({
         nombre : mascota.nombre,
         edad : mascota.edad,
-        birthday : mascota.birthday
+        birthday : mascota.birthday,
+        idTipoMascota : mascota.idTipoMascota
     })
 
     resp.send("OK")
