@@ -6,14 +6,22 @@ import { Sequelize, DataTypes } from "sequelize"
 
 //const CADENA_CONEXION = "postgres://veterinaria:veterinaria@localhost:5432/veterinariadb"
 const CADENA_CONEXION = process.env.DATABASE_URL
-const sequelize = new Sequelize(CADENA_CONEXION, {
-    dialectOptions : {
-        ssl : {
-            require : true,
-            rejectUnauthorized : false
+let sequelize;
+if (process.env.NODE_ENV == "production") {
+    sequelize = new Sequelize(CADENA_CONEXION, {
+        dialectOptions : {
+            ssl : {
+                require : true,
+                rejectUnauthorized : false
+            }
         }
-    }
-})
+    })
+}else {
+    sequelize = new Sequelize(CADENA_CONEXION, {
+        dialect : "postgres"
+    })
+}
+
 
 // Definir nuestra entidades
 const Mascota = sequelize.define("Mascota", {
